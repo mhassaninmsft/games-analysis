@@ -1,0 +1,22 @@
+CREATE TABLE games (
+  id SERIAL PRIMARY KEY,
+  url TEXT,
+  types TEXT,
+  name TEXT,
+  desc_snippet TEXT,
+  recent_reviews TEXT,
+  all_reviews TEXT,
+  release_date DATE,
+  developer TEXT,
+  publisher TEXT,
+  popular_tags TEXT,
+  game_details TEXT,
+  languages TEXT,
+  achievements TEXT,
+  genre TEXT,
+  game_description TEXT,
+  mature_content TEXT,
+  minimum_requirements TEXT,
+  recommended_requirements TEXT, 
+  original_price TEXT
+);

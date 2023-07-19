@@ -1,0 +1,4 @@
+dataclasses
+psycopg2
+sqlalchemy
+chromadb
