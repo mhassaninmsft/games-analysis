@@ -20,7 +20,9 @@ class MyEmbedding:
             engine="adaembedding1")
         embeddings = response['data'][0]['embedding']
         chroma_db = ChromaEmbedding()
+        # Pass the embedding to the database Here
         chroma_db.create_embedding(input, embeddings)
+        # TODO: Save the embedding to the database Andrew
         print(response)
 
     def search_by_embedding(self, embedding):

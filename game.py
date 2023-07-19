@@ -5,6 +5,7 @@ from sqlalchemy.orm import registry
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import create_engine
+from dataclasses_json import dataclass_json
 import os
 
 DB_HOST = "localhost"
@@ -44,6 +45,7 @@ Session = sessionmaker(engine)
 
 
 @reg.mapped_as_dataclass(unsafe_hash=True)
+@dataclass_json
 class Game:
     """Game class will be converted to a dataclass"""
 

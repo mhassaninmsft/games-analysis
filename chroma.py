@@ -19,7 +19,7 @@ class ChromaEmbedding:
         self.collection = self.client.get_or_create_collection(
             name="my_collection")
 
-    def create_embedding(self, inputText, inputEmbedding, id: str):
+    def create_embedding(self, inputText, id: str):
         """ Create an embedding from a text. Here the id is the url of the website"""
         self.collection.add(
             documents=[inputText],

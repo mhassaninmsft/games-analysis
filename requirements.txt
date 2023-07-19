@@ -2,3 +2,4 @@ dataclasses
 psycopg2
 sqlalchemy
 chromadb
+dataclasses_json
