@@ -1,10 +1,13 @@
 # from dataclasses import dataclass
+import datetime
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import relationship
+
 import csv
 from sqlalchemy.orm import registry
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from sqlalchemy import create_engine
+from sqlalchemy import ForeignKey, create_engine
 from dataclasses_json import dataclass_json
 import os
 
@@ -13,31 +16,9 @@ DB_NAME = "gamesdb"
 DB_USER = "gamesuser"
 DB_PASS = os.getenv("PGPASSWORD")
 
-# @dataclass
-# class Game:
-#     url: str
-#     types: str
-#     name: str
-#     desc_snippet: str
-#     recent_reviews: str
-#     all_reviews: str
-#     release_date: str
-#     developer: str
-#     publisher: str
-#     popular_tags: str
-#     game_details: str
-#     languages: str
-#     achievements: str
-#     genre: str
-#     game_description: str
-#     mature_content: str
-#     minimum_requirements: str
-#     recommended_requirements: str
-#     original_price: str
-
-
 # reg = registry()
 reg = registry()
+reg.configure(True)
 # replace with your database URL
 engine = create_engine(
     f'postgresql://{DB_USER}:{DB_PASS}@localhost:5432/{DB_NAME}')
@@ -48,9 +29,7 @@ Session = sessionmaker(engine)
 @dataclass_json
 class Game:
     """Game class will be converted to a dataclass"""
-
     __tablename__ = "game"
-
     url: Mapped[str] = mapped_column(init=False, primary_key=True)
     types: Mapped[str]
     name: Mapped[str]
@@ -70,6 +49,81 @@ class Game:
     minimum_requirements: Mapped[str]
     recommended_requirements: Mapped[str]
     original_price: Mapped[str]
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+@reg.mapped_as_dataclass(unsafe_hash=True)
+@dataclass_json
+class Customer:
+    __tablename__ = "customer"
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    username: Mapped[str]
+    email: Mapped[str]
+    created_at: Mapped[datetime.datetime]
+
+    # purchases = relationship("Purchase", back_populates="purchase")
+    # complaints = relationship("Complaint", back_populates="customer")
+    # shopping_carts = relationship("ShoppingCart", back_populates="customer")
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+@reg.mapped_as_dataclass(unsafe_hash=True)
+@dataclass_json
+class Purchase:
+    __tablename__ = "purchase"
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    customer_id: Mapped[int] = mapped_column(ForeignKey('customer.id'))
+    # customer: relationship('Customer')
+    game_id: Mapped[int] = mapped_column(ForeignKey('game.id'))
+    # game: relationship('Game')
+    created_at: Mapped[datetime.datetime]
+
+    # customer = relationship("Customer", back_populates="purchases")
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+@reg.mapped_as_dataclass(unsafe_hash=True)
+@dataclass_json
+class Complaint:
+    __tablename__ = "complaint"
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    complaint: Mapped[str]
+    customer_id: Mapped[int] = mapped_column(ForeignKey('customer.id'))
+    # customer: relationship('Customer')
+    purchase_id: Mapped[int] = mapped_column(ForeignKey('purchase.id'))
+    # game: relationship('Game')
+    created_at: Mapped[datetime.datetime]
+
+    # user = relationship("User", back_populates="complaints")
+    # game = relationship("Game", back_populates="complaints")
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+@reg.mapped_as_dataclass(unsafe_hash=True)
+@dataclass_json
+class ShoppingCart:
+    __tablename__ = "shopping_cart"
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    customer_id: Mapped[int] = mapped_column(ForeignKey('customer.id'))
+    # customer: relationship('Customer')
+    game_id: Mapped[int] = mapped_column(ForeignKey('game.id'))
+    # game: relationship('Game')
+    created_at: Mapped[datetime.datetime]
+
+    # customer = relationship("Customer", back_populates="shopping_carts")
+    # game = relationship("Game", back_populates="shopping_carts")
 
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
@@ -115,13 +169,14 @@ def save_games(games: list[Game]):
         session.add(game)
     session.commit()
 
-    # for game in games:
-    #     try:
-    #         session.add(game)
-    #         session.commit()
-    #     except Exception as e:
-    #         session.rollback()
-    #         print("Error")
-    #         print(e)
-    #         print("Game: ")
-    #         print(game)
+
+def get_games_from_database() -> list[Game]:
+    session = Session()
+    games = session.query(Game).all()
+    return games
+
+
+def get_complaints_from_database() -> list[Complaint]:
+    session = Session()
+    complaints = session.query(Complaint).all()
+    return complaints

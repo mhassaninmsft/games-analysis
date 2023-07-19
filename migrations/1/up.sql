@@ -1,4 +1,4 @@
-CREATE TABLE games (
+CREATE TABLE game (
   id SERIAL PRIMARY KEY,
   url TEXT,
   types TEXT,
@@ -6,7 +6,7 @@ CREATE TABLE games (
   desc_snippet TEXT,
   recent_reviews TEXT,
   all_reviews TEXT,
-  release_date DATE,
+  release_date TEXT,
   developer TEXT,
   publisher TEXT,
   popular_tags TEXT,
