@@ -25,7 +25,7 @@ class GameSearch:
 
 def example_usage():
     gameSearch = GameSearch()
-    games = gameSearch.search_game('Kingdom Come')
+    games = gameSearch.search_game('I am looking to buy a game about dragons')
     for id in games['ids']:
         for id1 in id:
             game = get_games_from_database_by_url(id1)

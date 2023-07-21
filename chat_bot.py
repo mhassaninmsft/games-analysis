@@ -12,7 +12,7 @@ class ChatBot:
     def __init__(self, system_message: str = "You are an AI assistant that helps people find information."):
         self._messages = [{"role": "system",
                            "content": system_message}]
-        self._engine = "gpt351"
+        self._engine = "gpt67"
         self._temperature = 0.7
         self._max_tokens = 800
         self._top_p = 0.95
