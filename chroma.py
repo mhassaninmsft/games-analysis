@@ -10,23 +10,25 @@ class ChromaEmbedding:
     # client: chromadb.Client
     # collection: chromadb.Collection
 
-    def __init__(self):
+    def __init__(self, collection_name: str = "my_collection"):
         self.client = chromadb.Client(Settings(
             chroma_db_impl="duckdb+parquet",
             # Optional, defaults to .chromadb/ in the current directory
             persist_directory="./chromastate/"
         ))
         self.collection = self.client.get_or_create_collection(
-            name="my_collection")
+            name=collection_name)
 
     def create_embedding(self, inputText, id: str):
-        """ Create an embedding from a text. Here the id is the url of the website"""
+        """ Create an embedding from a text. Here the id is the url 
+        of the website"""
         self.collection.add(
             documents=[inputText],
             # By removing the embedding we use the default embedding function
             # embeddings=[inputEmbedding],
             # metadatas=[{"chapter": "3", "verse": "16"}, {
-            # "chapter": "3", "verse": "5"}, {"chapter": "29", "verse": "11"}, ...],
+            # "chapter": "3", "verse": "5"}, {"chapter": "29", "verse": "11"},
+            #  ...],
             ids=[id]
         )
 
@@ -34,7 +36,7 @@ class ChromaEmbedding:
         """ Search for an embedding by query."""
         res = self.collection.query(
             query_embeddings=[embedding],
-            n_results=2,
+            n_results=10,
             # where={"metadata_field": "is_equal_to_this"},
             # where_document={"$contains": "search_string"}
         )

@@ -84,6 +84,8 @@ class Purchase:
     # game: relationship('Game')
     created_at: Mapped[datetime.datetime]
 
+    customer = relationship("Customer", backref="purchases")
+
     # customer = relationship("Customer", back_populates="purchases")
 
     def __init__(self, **kwargs):
@@ -131,7 +133,8 @@ class ShoppingCart:
 
 
 def get_games() -> list[Game]:
-    """ This function will read the list of games from the CSV file and return a list of Game objects"""
+    """ This function will read the list of games from the CSV file and return
+      a list of Game objects"""
     games = []
     with open('./data/steam_games.csv') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -176,7 +179,15 @@ def get_games_from_database() -> list[Game]:
     return games
 
 
-def get_complaints_from_database() -> list[Complaint]:
+def get_games_from_database_by_url(url: str) -> list[Game]:
     session = Session()
-    complaints = session.query(Complaint).all()
+    games = session.query(Game).filter(Game.url == url).all()
+    return games
+
+
+def get_complaints_from_database() -> list[Purchase]:
+    session = Session()
+    complaints = session.query(Purchase).all()
+    comp1 = complaints[0]
+    print(comp1.customer)
     return complaints
