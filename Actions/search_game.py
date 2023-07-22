@@ -1,9 +1,11 @@
 
 from Actions.actions import ActionsEnum, ChatBotAction
 from chat_bot import ChatBot
+from game import DbConnection, Game
 from game_search import GameSearch
 import json
-
+from globals import user_id
+from sqlalchemy.orm import Session
 # should be checked from the AI response
 adding_game_key_word = "Trying to Add Game"
 restart_over = "Restart Over"  # Should be checked at user side
@@ -16,11 +18,13 @@ with open("./Prompts/GameSearchPrompt.txt", "r") as f:
 
 class GameSearchAction(ChatBotAction):
     def __init__(self, games_query: str):
+        self.db_connection = DbConnection()
         self.games_query = games_query
         self.gameSearch = GameSearch()
         initial_games = self.gameSearch.search_game(games_query)
         system_message = f"{system_prompt} and here is the list of games {str(initial_games)}"
         self.chat_bot = ChatBot(system_message=system_message)
+        self.user_id = user_id
 
     def execute(self) -> ActionsEnum:
         """Main entrypoint in the chatbot workflow."""
@@ -45,6 +49,17 @@ class GameSearchAction(ChatBotAction):
                 # Parse the Json response_text
                 res = json.loads(response_text)
                 print(res)
+                game_url = res["cart"][0]["id"]
+                print(f"Game: {game_url}")
+                session = self.db_connection.get_session()
+                game = get_game_by_url(game_url, session)
+                print(f"Obtained game from database as {game}")
                 return ActionsEnum.End
 
                 # return ActionsEnum.AddGame
+
+
+def get_game_by_url(game_url: str, session: Session) -> Game:
+    """This function will return a game object from the database based on the game url"""
+    game = session.query(Game).filter(Game.url == game_url).first()
+    return game

@@ -25,6 +25,16 @@ engine = create_engine(
 Session = sessionmaker(engine)
 
 
+class DbConnection:
+    def __init__(self):
+        self.engine = create_engine(
+            f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}')
+        self.session = Session()
+
+    def get_session(self):
+        return self.session
+
+
 @reg.mapped_as_dataclass(unsafe_hash=True)
 @dataclass_json
 class Game:
