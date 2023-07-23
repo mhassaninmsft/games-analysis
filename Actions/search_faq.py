@@ -10,4 +10,3 @@ class SearchFaqAction:
         """ Search the FAQ for the request."""
         docs = self.search_faq_service.search_faq(request)
         return docs
-    

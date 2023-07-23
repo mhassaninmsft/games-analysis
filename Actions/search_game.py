@@ -1,7 +1,7 @@
 
 from Actions.actions import ActionsEnum, ChatBotAction
 from chat_bot import ChatBot
-from game import DbConnection, Game
+from models import DbConnection, Game, ShoppingCart
 from game_search import GameSearch
 import json
 from globals import user_id
@@ -53,7 +53,10 @@ class GameSearchAction(ChatBotAction):
                 print(f"Game: {game_url}")
                 session = self.db_connection.get_session()
                 game = get_game_by_url(game_url, session)
-                print(f"Obtained game from database as {game}")
+                print(f"Obtained game from database as {game.name}")
+                add_game_to_cart(game, session)
+                print("Added game to cart")
+                # Add the game to the user cart
                 return ActionsEnum.End
 
                 # return ActionsEnum.AddGame
@@ -63,3 +66,11 @@ def get_game_by_url(game_url: str, session: Session) -> Game:
     """This function will return a game object from the database based on the game url"""
     game = session.query(Game).filter(Game.url == game_url).first()
     return game
+
+
+def add_game_to_cart(game: Game, session: Session):
+    """This function will add the game to the user cart"""
+    user_cart: ShoppingCart = ShoppingCart(
+        customer_id=user_id, game_id=game.id)
+    session.add(user_cart)
+    session.commit()

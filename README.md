@@ -15,6 +15,7 @@
 2. Are they asking questions from the FAQ
 3. Are they asking general product questions, or about a particular product that they have ordered
 4. Are they complaining about a product
+5. Checkout games flow
 
 # Big one
 How to determine which flow we are in

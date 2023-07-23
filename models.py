@@ -29,10 +29,10 @@ class DbConnection:
     def __init__(self):
         self.engine = create_engine(
             f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}')
-        self.session = Session()
+        self.session = Session
 
     def get_session(self):
-        return self.session
+        return self.session()
 
 
 @reg.mapped_as_dataclass(unsafe_hash=True)
@@ -40,7 +40,8 @@ class DbConnection:
 class Game:
     """Game class will be converted to a dataclass"""
     __tablename__ = "game"
-    url: Mapped[str] = mapped_column(init=False, primary_key=True)
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    url: Mapped[str]
     types: Mapped[str]
     name: Mapped[str]
     desc_snippet: Mapped[str]
@@ -87,7 +88,10 @@ class Customer:
 @dataclass_json
 class Purchase:
     __tablename__ = "purchase"
-    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    # id is populated by the database
+    id: Mapped[int] = mapped_column(
+        init=False, primary_key=True, autoincrement=True)
+    # id: Mapped[int] = mapped_column(init=False, primary_key=True)
     customer_id: Mapped[int] = mapped_column(ForeignKey('customer.id'))
     # customer: relationship('Customer')
     game_id: Mapped[int] = mapped_column(ForeignKey('game.id'))
@@ -132,7 +136,7 @@ class ShoppingCart:
     # customer: relationship('Customer')
     game_id: Mapped[int] = mapped_column(ForeignKey('game.id'))
     # game: relationship('Game')
-    created_at: Mapped[datetime.datetime]
+    created_at: Mapped[datetime.datetime] = mapped_column(init=False)
 
     # customer = relationship("Customer", back_populates="shopping_carts")
     # game = relationship("Game", back_populates="shopping_carts")
