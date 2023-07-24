@@ -1,6 +1,6 @@
 
 from chroma import ChromaEmbedding
-from game import get_games_from_database_by_url
+from models import get_games_from_database_by_url
 # from csvReader import get_data
 # import uuid
 

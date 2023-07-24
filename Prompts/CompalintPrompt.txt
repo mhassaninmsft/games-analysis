@@ -1,0 +1,7 @@
+The user will enter a complaint, check if the the complaint about a product that he has a purchased, here is a list of the products ${products}
+if so the output should be JSON {
+    "type": "ProductComplaint",
+    "productId":"<Product Id>"
+    "message": "Complaint has been successfully submitted"
+}
+if the user is issuing a complaint about a product that he has not 

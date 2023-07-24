@@ -14,13 +14,15 @@ class ChromaEmbedding:
         self.client = chromadb.Client(Settings(
             chroma_db_impl="duckdb+parquet",
             # Optional, defaults to .chromadb/ in the current directory
-            persist_directory="./chromastate/"
+            persist_directory="/mnt/chromastate/chromastate/"
         ))
+        # self.client = chromadb.PersistentClient(
+        #     path="/mnt/chromastate/chromastate")
         self.collection = self.client.get_or_create_collection(
             name=collection_name)
 
     def create_embedding(self, inputText, id: str):
-        """ Create an embedding from a text. Here the id is the url 
+        """ Create an embedding from a text. Here the id is the url
         of the website"""
         self.collection.add(
             documents=[inputText],

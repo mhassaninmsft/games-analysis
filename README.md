@@ -9,9 +9,7 @@
 
 ## flows
 
-1. Is the user ordering a new product 
-   1. Are they asking for a particular product
-   2. Or exploring
+1. Is the user ordering a new product ( this includes Are they asking for a particular productOr exploring)
 2. Are they asking questions from the FAQ
 3. Are they asking general product questions, or about a particular product that they have ordered
 4. Are they complaining about a product
@@ -19,3 +17,8 @@
 
 # Big one
 How to determine which flow we are in
+
+
+# Steps needed to bootstrap the application
+1. A file share that contains the chromastate embeddings
+2. A csv file that contains the product information which will be boostrapped into the database

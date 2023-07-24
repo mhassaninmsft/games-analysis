@@ -3,7 +3,7 @@
 # Write to a PostgreSQL database, also for each game it will create an
 # embedding against OPENAI
 
-from game import get_games, save_games
+from models import get_games, save_games
 
 
 def bootstrap():

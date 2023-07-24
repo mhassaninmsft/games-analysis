@@ -1,6 +1,6 @@
 
 # from database import GamesDatabase
-# from bootstrap import bootstrap
+from bootstrap import bootstrap
 # from chroma import ChromaEmbedding
 # from game import get_complaints_from_database
 from Actions.workflow import begin_chat_bot
@@ -11,6 +11,7 @@ if __name__ == '__main__':
     # bootstrap()
     # example_usage()
     begin_chat_bot()
+    # bootstrap()
     # action1 = ActionsEnum.Complaint
     # print(str(action1))
     # action2 = ActionsEnum("Inquire2")

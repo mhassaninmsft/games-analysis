@@ -11,7 +11,7 @@ from sqlalchemy import ForeignKey, create_engine
 from dataclasses_json import dataclass_json
 import os
 
-DB_HOST = "localhost"
+DB_HOST = "database"  # "localhost"
 DB_NAME = "gamesdb"
 DB_USER = "gamesuser"
 DB_PASS = os.getenv("PGPASSWORD")
@@ -21,7 +21,7 @@ reg = registry()
 reg.configure(True)
 # replace with your database URL
 engine = create_engine(
-    f'postgresql://{DB_USER}:{DB_PASS}@localhost:5432/{DB_NAME}')
+    f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}')
 Session = sessionmaker(engine)
 
 

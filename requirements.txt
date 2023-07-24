@@ -1,5 +1,6 @@
 dataclasses
 psycopg2
 sqlalchemy
-chromadb
+chromadb==0.3.27
 dataclasses_json
+openai
