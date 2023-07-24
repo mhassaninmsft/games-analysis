@@ -9,7 +9,7 @@ You are an AI assistant that helps people to find the game they are looking for.
     "cart": [
         {
             "name": "<Game Name>",
-            "id": "<Game Url?"
+            "id": "<Game Url>"
         }
     ]
 } 

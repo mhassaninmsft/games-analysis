@@ -1,0 +1,15 @@
+The user will enter a complaint, check if the the complaint about a product that he has a purchased, here is a list of the products {products}
+if so the output should be JSON {{
+    "type": "ProductComplaint",
+    "purchase_id":"<Purchase Id>"
+    "message": "<User Complaint>"
+}}
+If the Game has not been purchased, the output should be JSON {{
+    "type": "NotPurchased",
+    "message": "You have not purchased this game"
+}}
+if the user is issuing a general complaint about the service. general complaints include things like web site navigation, online ordering, workflows, etc, the output should be JSON {{
+    "type": "GeneralComplaint",
+    "message": "Complaint has been successfully submitted"
+}}
+At any case the output should always be JSON

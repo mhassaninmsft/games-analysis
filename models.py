@@ -11,7 +11,7 @@ from sqlalchemy import ForeignKey, create_engine
 from dataclasses_json import dataclass_json
 import os
 
-DB_HOST = "localhost"
+DB_HOST = "localhost"  # "localhost"
 DB_NAME = "gamesdb"
 DB_USER = "gamesuser"
 DB_PASS = os.getenv("PGPASSWORD")
@@ -21,7 +21,7 @@ reg = registry()
 reg.configure(True)
 # replace with your database URL
 engine = create_engine(
-    f'postgresql://{DB_USER}:{DB_PASS}@localhost:5432/{DB_NAME}')
+    f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}')
 Session = sessionmaker(engine)
 
 
@@ -112,7 +112,7 @@ class Purchase:
 class Complaint:
     __tablename__ = "complaint"
     id: Mapped[int] = mapped_column(
-        init=False, primary_key=True, autoincrement=True)
+        init=False, primary_key=True, autoincrement=True, unique=True)
     complaint: Mapped[str]
     customer_id: Mapped[int] = mapped_column(ForeignKey('customer.id'))
     # customer: relationship('Customer')
@@ -180,7 +180,7 @@ def get_games() -> list[Game]:
     return games
 
 
-def save_games(games: list[Game]):
+def save_games_to_psql_database(games: list[Game]):
     session = Session()
     # games = get_games()
     for game in games:

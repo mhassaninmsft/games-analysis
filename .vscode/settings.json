@@ -9,12 +9,15 @@
         "editor.wordBasedSuggestions": false,
         "editor.defaultFormatter": "ms-python.autopep8",
         "editor.formatOnSave": true
+        
     },
     "python.linting.flake8Args": [
         "--max-line-length=120",
         "--ignore=E402,F841,F401,E302,E305, E501",
     ],
     "cSpell.words": [
+        "chromastate",
         "sessionmaker"
     ],
+    "python.formatting.provider": "autopep8"
 }

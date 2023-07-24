@@ -1,6 +1,16 @@
-# docker-compose.yml
-version: '3'
+version: '3.4'
+
 services:
+  gamesanalysis:
+    image: gamesanalysis
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    # volumes:
+    #   - /mnt/chromastate:/mnt/chromastate
+
   database:
     image: "postgres" # use latest official postgres version
     ports:

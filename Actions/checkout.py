@@ -2,7 +2,7 @@
 import datetime
 from Actions.actions import ActionsEnum, ChatBotAction
 from sqlalchemy.orm import Session
-from game import DbConnection, Game, Purchase, ShoppingCart
+from models import DbConnection, Game, Purchase, ShoppingCart
 from globals import user_id
 
 
