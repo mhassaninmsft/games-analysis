@@ -111,7 +111,8 @@ class Purchase:
 @dataclass_json
 class Complaint:
     __tablename__ = "complaint"
-    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    id: Mapped[int] = mapped_column(
+        init=False, primary_key=True, autoincrement=True)
     complaint: Mapped[str]
     customer_id: Mapped[int] = mapped_column(ForeignKey('customer.id'))
     # customer: relationship('Customer')
