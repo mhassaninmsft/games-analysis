@@ -6,10 +6,10 @@ from enum import Enum
 
 class ActionsEnum(Enum):
     """ Actions Enum """
-    ProductSearch = "ProductSearch"
+    ProductSearchOrPurchase = "ProductSearchOrPurchase"
     FaQSearch = "FaQSearch"
     Complaint = "Complaint"
-    Inquire = "Inquire"
+    CheckOut = "CheckOut"
     End = "End"
 
 # Interface for the actions
