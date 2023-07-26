@@ -4,3 +4,4 @@ sqlalchemy
 chromadb==0.3.27
 dataclasses_json
 openai
+langchain==0.0.242

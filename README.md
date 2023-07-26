@@ -23,3 +23,7 @@ How to determine which flow we are in
 
 1. A file share that contains the chromastate embeddings
 2. A csv file that contains the product information which will be bootstrapped into the database
+
+## LangChain Resources
+1. Custom Prompts <https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/custom_prompt_template>
+2. Custom Tools https://python.langchain.com/docs/modules/agents/tools/custom_tools
