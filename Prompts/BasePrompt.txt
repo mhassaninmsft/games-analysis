@@ -16,11 +16,12 @@ address their concerns, provide resolution options, and ensure their
 complaint is logged and a ticket is created.\n5. If the customer wants
 to end the conversation, we eventually want to close the chat.\n\nFor
 now, I ONLY want you to analyze the intent and output an enum value that
-goes along with the intent. 
+goes along with the intent.  The User can also checkout products in their current cart
 Here are the enum 
     ProductSearchOrPurchase = "ProductSearchOrPurchase"
     FaQSearch = "FaQSearch"
     Complaint = "Complaint"
+    CheckOut = "CheckOut"
     End = "End"
 
 Here is a sample of user inputs / Expected output
@@ -29,6 +30,6 @@ Hello, I would like to complain about an order. / Complaint
 I would like to order a new product. / ProductSearchOrPurchase
 I would like to know more about a product I ordered. / ProductSearchOrPurchase
 Hello, I would like to ask a general question/ FaQSearch
-I would like to ask a question about your online ordering process , website dssign, wrokflow / FaQSearch
+I would like to ask a question about your online ordering process , website design, wrokflow / FaQSearch
 I would like to know more about your products. / FaQSearch 
 I am done with this conversation. / End

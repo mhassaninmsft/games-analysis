@@ -50,11 +50,12 @@ class ComplaintAction(ChatBotAction):
         if res_json['type'] == "ProductComplaint":
             purchase_id = res_json["purchase_id"]
             self.add_complaint_to_database(purchase_id)
-            pass
+            print("Chatbot: Product Complaint. Thank you for letting us know.")
         elif res_json["type"] == "GeneralComplaint":
-            print("General Complaint. Thank you for letting us know.")
+            print("Chatbot: General Complaint. Thank you for letting us know.")
         elif res_json["type"] == "NotPurchased":
-            print("You have Not Purchased this game. Thank you for letting us know.")
+            print(
+                "Chatbot: You have Not Purchased this game. Thank you for letting us know.")
         return ActionsEnum.End
 
     def get_purchased_games_by_user(self) -> list[GamePurchased]:

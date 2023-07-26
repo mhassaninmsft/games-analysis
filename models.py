@@ -11,7 +11,7 @@ from sqlalchemy import ForeignKey, create_engine
 from dataclasses_json import dataclass_json
 import os
 
-DB_HOST = "localhost"  # "localhost"
+DB_HOST = "localhost"  # "database"
 DB_NAME = "gamesdb"
 DB_USER = "gamesuser"
 DB_PASS = os.getenv("PGPASSWORD")

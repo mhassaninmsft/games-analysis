@@ -1,22 +1,20 @@
 
 from Actions.actions import ActionsEnum, ChatBotAction, GetAction
+from Actions.base_workflow import get_entry_point
 from Actions.checkout import CheckoutAction
 from Actions.complaint import ComplaintAction
+from Actions.search_faq import SearchFaqAction
 from Actions.search_game import GameSearchAction
 
 
 def begin_chat_bot():
     """Main entrypoint in the chatbot workflow."""
-    # current_action: ChatBotAction = GameSearchAction(
-    #     games_query="I am looking to buy a Horror game set in space")
-    # current_action: ChatBotAction = CheckoutAction()
-    current_action: ChatBotAction = ComplaintAction(
-        "Dead Space really sucked, shooting was horrible")
     while True:
+        print("Chatbot: How can I be of Assistance to you today? You can browse our lists of games , give us feedback or checkout your cart. \n")
+        user_input = input("User: ")
+        current_action: ChatBotAction = get_entry_point(user_input)
         current_action = current_action.execute()
         if current_action == ActionsEnum.End:
-            print("Ending Conversation")
-            break
+            print("Successfully Ended Conversation thread, starting new thread")
         else:
-            print("Domryjinh new returned")
-            # current_action = GetAction(current_action)
+            print("Successfully Ended Conversation thread, starting new thread")
