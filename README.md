@@ -27,4 +27,5 @@ How to determine which flow we are in
 ## LangChain Resources
 1. Custom Prompts <https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/custom_prompt_template>
 2. Custom Tools https://python.langchain.com/docs/modules/agents/tools/custom_tools
-3. https://github.com/langchain-ai/langchain/issues/4000
+3. https://github.com/langchain-ai/langchain/issues/4000 
+4. https://news.ycombinator.com/item?id=36645575
