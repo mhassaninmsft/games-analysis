@@ -100,10 +100,6 @@ def checkout_user_cart() -> str:
     return "Checkout Completed"
 
 
-# def get_faq_answer(question: str) -> str:
-#     return "This is the answer to your question"
-
-
 def get_closest_faq(question: str) -> str:
     my_embeddings_service = FaQEmbedding()
     res = my_embeddings_service.search_faq(question)
@@ -132,13 +128,7 @@ tools = [
         # args_schema=ComplaintInput,
         # coroutine= ... <- you can specify an async method if desired as well
     ),
-    # StructuredTool.from_function(
-    #     func=get_faq_answer,
-    #     name="Get FAQ Answer",
-    #     description="To Answer the User question, you should get the releveant quesions/asnwers from the FAQ first, this is donme by calling GetClosestFAQAnswer",
-    #     # args_schema=ComplaintInput,
-    #     # coroutine= ... <- you can specify an async method if desired as well
-    # ),
+
     StructuredTool.from_function(
         func=get_closest_faq,
         name="GetClosestFAQAnswer",
@@ -157,6 +147,7 @@ tools = [
 chat_history = MessagesPlaceholder(variable_name="chat_history")
 memory = ConversationBufferMemory(
     memory_key="chat_history", return_messages=True)
+memory.chat_memory.add_user_message("The Purchase if for the game Doom 2 is 3")
 
 
 def run_tool():
@@ -168,6 +159,11 @@ def run_tool():
             "input_variables": ["input", "agent_scratchpad", "chat_history"]
         }
     )
+    # agent.agent.llm_chain.prompt.template
+    # agent.agent.llm_chain.prompt.lc_kwargs["messages"][0].lc_kwargs[
+    #     "prompt"].lc_kwargs["template"] += "The Purchase if for the game Doom 2 is 3"
+    # print(
+    #     agent.agent.llm_chain.prompt.lc_kwargs["messages"][0].lc_kwargs["prompt"].lc_kwargs["template"])
 
     while True:
         user_input = input("User: ")
