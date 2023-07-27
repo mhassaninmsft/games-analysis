@@ -20,6 +20,9 @@ from Actions.complaint import ComplaintAction, GamePurchased
 from models import Complaint, DbConnection, Game, Purchase
 from langchain.prompts import MessagesPlaceholder
 
+# If you want to trace the execution of the program, set to "true"
+# os.environ["LANGCHAIN_TRACING"] = "true"
+# os.environ["LANGCHAIN_HANDLER"] = "langchain"
 
 # openai.api_type = "azure"
 # openai.api_base = "https://longfellowai.openai.azure.com/"
@@ -35,6 +38,7 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 langchain.verbose = True
 
 llm = AzureChatOpenAI(temperature=0, deployment_name="gpt67")
+# llm = AzureChatOpenAI(temperature=0, deployment_name="gpt353")
 
 
 print("LLM Created")
@@ -62,7 +66,7 @@ def get_purchased_games_by_user() -> str:
         game = session.query(Game).filter(
             Game.id == purchase.game_id).one()
         purchased_games_info.append(
-            (GamePurchased(game_id=game.id, name=game.name, description=game.game_description, purchase_id=purchase.id)))
+            (GamePurchased(game_id=game.id, name=game.name, description="none", purchase_id=purchase.id)))
 
     return str(purchased_games_info)
 
@@ -90,34 +94,32 @@ def get_game_purchase_id(game: str) -> int:
 tools = [
     StructuredTool.from_function(
         func=get_purchased_games_by_user,
-        name="GetPurchasedGamesByUser",
-        args_schema=None,
-        description="useful for when you need to get the list of current games a user has purchased, this is important to get the purchase_id of the game",
+        name="Get User Games",
+        # args_schema=None,
+        description="Gets all the user purchased games",
         # coroutine= ... <- you can specify an async method if desired as well
     ),
     StructuredTool.from_function(
         func=add_complaint_to_database,
-        name="AddComplaintToDatabase",
-        description="useful for when you need to add a user complaint about a game to the database, needs the Purchase Id",
+        name="Add Complaint To Database",
+        description="Add a complaint to the database, given a purchase id and a complaint",
         args_schema=ComplaintInput,
         # coroutine= ... <- you can specify an async method if desired as well
     ),
-    Tool.from_function(
-        func=get_game_purchase_id,
-        name="GetGamePurchaseId",
-        description="useful for when you need to Find the purchase id of a game"
-        # coroutine= ... <- you can specify an async method if desired as well
-    ),
+    # StructuredTool.from_function(
+    #     func=get_game_purchase_id,
+    #     name="Get_Purchase_Id",
+    #     description="You can use that tool to look up the game purchase id for a game name."
+    #     # coroutine= ... <- you can specify an async method if desired as well
+    # ),
 ]
 chat_history = MessagesPlaceholder(variable_name="chat_history")
 memory = ConversationBufferMemory(
     memory_key="chat_history", return_messages=True)
-# memory = ConversationBufferMemory(memory_key="chat_history")
 
 
 def run_tool():
     # Construct the agent. We will use the default agent type here.
-    # See documentation for a full list of options.
     agent = initialize_agent(
         tools, llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True, memory=memory,
         agent_kwargs={
@@ -128,7 +130,6 @@ def run_tool():
 
     while True:
         user_input = input("User: ")
-        agent.run(user_input)
-        res = agent.run(user_input)
-        # agent.
+        # agent.run(user_input)
+        res = agent.run(input=user_input)
         print("Chatbot: " + res)
