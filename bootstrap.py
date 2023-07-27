@@ -14,8 +14,8 @@ def bootstrap():
       chroma database"""
     games = get_games()
     save_games_to_psql_database(games)
-    create_and_save_game_embeddings(games)
-    create_and_save_faq_embeddings()
+    # create_and_save_game_embeddings(games)
+    # create_and_save_faq_embeddings()
 
 
 def create_and_save_game_embeddings(games: list[Game]):

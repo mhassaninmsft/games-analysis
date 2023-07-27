@@ -2,6 +2,8 @@
 import datetime
 
 from pydantic import BaseModel, Field
+from Actions.checkout import CheckoutAction
+from faq_embeddings import FaQEmbedding
 from globals import user_id
 # from langchain.callbacks.manager import (
 #     AsyncCallbackManagerForToolRun,
@@ -91,6 +93,23 @@ def get_game_purchase_id(game: str) -> int:
     return 1
 
 
+def checkout_user_cart() -> str:
+    print("Shipping address: 123 Main St.")
+    checkout_action = CheckoutAction()
+    checkout_action.execute()
+    return "Checkout Completed"
+
+
+# def get_faq_answer(question: str) -> str:
+#     return "This is the answer to your question"
+
+
+def get_closest_faq(question: str) -> str:
+    my_embeddings_service = FaQEmbedding()
+    res = my_embeddings_service.search_faq(question)
+    return str(res)
+
+
 tools = [
     StructuredTool.from_function(
         func=get_purchased_games_by_user,
@@ -106,6 +125,28 @@ tools = [
         args_schema=ComplaintInput,
         # coroutine= ... <- you can specify an async method if desired as well
     ),
+    StructuredTool.from_function(
+        func=checkout_user_cart,
+        name="Checks out the user cart",
+        description="Checks out the user cart",
+        # args_schema=ComplaintInput,
+        # coroutine= ... <- you can specify an async method if desired as well
+    ),
+    # StructuredTool.from_function(
+    #     func=get_faq_answer,
+    #     name="Get FAQ Answer",
+    #     description="To Answer the User question, you should get the releveant quesions/asnwers from the FAQ first, this is donme by calling GetClosestFAQAnswer",
+    #     # args_schema=ComplaintInput,
+    #     # coroutine= ... <- you can specify an async method if desired as well
+    # ),
+    StructuredTool.from_function(
+        func=get_closest_faq,
+        name="GetClosestFAQAnswer",
+        description="returns the closest FAQ question/answer to the user question",
+        # args_schema=ComplaintInput,
+        # coroutine= ... <- you can specify an async method if desired as well
+    ),
+
     # StructuredTool.from_function(
     #     func=get_game_purchase_id,
     #     name="Get_Purchase_Id",
