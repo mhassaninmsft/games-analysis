@@ -32,3 +32,4 @@ How to determine which flow we are in
 
 # Starting Postgres
 docker-compose up database
+Call bootstrap to load psql with the data

@@ -4,6 +4,7 @@ import datetime
 from pydantic import BaseModel, Field
 from Actions.checkout import CheckoutAction
 from faq_embeddings import FaQEmbedding
+from game_search import GameSearch
 from globals import user_id
 # from langchain.callbacks.manager import (
 #     AsyncCallbackManagerForToolRun,
@@ -39,7 +40,8 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 langchain.verbose = True
 
-llm = AzureChatOpenAI(temperature=0, deployment_name="gpt67")
+llm = AzureChatOpenAI(temperature=0, deployment_name="gpt67",
+                      max_retries=3, request_timeout=30)
 # llm = AzureChatOpenAI(temperature=0, deployment_name="gpt353")
 
 
@@ -106,14 +108,20 @@ def get_closest_faq(question: str) -> str:
     return str(res)
 
 
+def answer_game_realted_questions(question: str) -> str:
+    my_embeddings_service = GameSearch()
+    res = my_embeddings_service.search_game(question)
+    return str(res)
+
+
 tools = [
-    StructuredTool.from_function(
-        func=get_purchased_games_by_user,
-        name="Get User Games",
-        # args_schema=None,
-        description="Gets all the user purchased games",
-        # coroutine= ... <- you can specify an async method if desired as well
-    ),
+    # StructuredTool.from_function(
+    #     func=get_purchased_games_by_user,
+    #     name="Get User Games",
+    #     # args_schema=None,
+    #     description="Gets all the user purchased games",
+    #     # coroutine= ... <- you can specify an async method if desired as well
+    # ),
     StructuredTool.from_function(
         func=add_complaint_to_database,
         name="Add Complaint To Database",
@@ -131,8 +139,16 @@ tools = [
 
     StructuredTool.from_function(
         func=get_closest_faq,
-        name="GetClosestFAQAnswer",
-        description="returns the closest FAQ question/answer to the user question",
+        name="GetFAQSummary",
+        description="returns the relevant FAQ section summary that can be used to answer the user's question",
+        # args_schema=ComplaintInput,
+        # coroutine= ... <- you can specify an async method if desired as well
+    ),
+
+    StructuredTool.from_function(
+        func=answer_game_realted_questions,
+        name="AnswerGameRelatedQuestions",
+        description="returns the list of games that are related to the user's question about games",
         # args_schema=ComplaintInput,
         # coroutine= ... <- you can specify an async method if desired as well
     ),
@@ -147,7 +163,12 @@ tools = [
 chat_history = MessagesPlaceholder(variable_name="chat_history")
 memory = ConversationBufferMemory(
     memory_key="chat_history", return_messages=True)
-memory.chat_memory.add_user_message("The Purchase if for the game Doom 2 is 3")
+# user_games = get_purchased_games_by_user()
+# memory.chat_memory.add_user_message(
+#     f" The list of my purchased games are{user_games}")
+# memory.chat_memory.add_user_message(
+#     """ If the user is asking questions from the FAQ, you can use the tool GetFAQSummary to get the
+#     relevant section from the FAQ and then answer the user question faithfully, It is important to answer the user question""")
 
 
 def run_tool():
