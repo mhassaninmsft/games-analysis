@@ -22,7 +22,7 @@ import os
 from Actions.complaint import ComplaintAction, GamePurchased
 from models import Complaint, DbConnection, Game, Purchase
 from langchain.prompts import MessagesPlaceholder
-
+from Actions.search_game import get_game_by_url, add_game_to_cart
 # If you want to trace the execution of the program, set to "true"
 # os.environ["LANGCHAIN_TRACING"] = "true"
 # os.environ["LANGCHAIN_HANDLER"] = "langchain"
@@ -42,7 +42,8 @@ langchain.verbose = True
 
 llm = AzureChatOpenAI(temperature=0, deployment_name="gpt67",
                       max_retries=3, request_timeout=30)
-# llm = AzureChatOpenAI(temperature=0, deployment_name="gpt353")
+# llm = AzureChatOpenAI(temperature=0, deployment_name="gpt353",
+#                       max_retries=3, request_timeout=30)
 
 
 print("LLM Created")
@@ -53,7 +54,17 @@ class ComplaintInput(BaseModel):
     complaint: str = Field()
 
 
+class AddGameToCartInput(BaseModel):
+    game_url: str = Field()
+
+
 # @tool("get_purchased_games_by_user")
+
+
+db_connection = DbConnection()
+session = db_connection.get_session()
+
+
 def get_purchased_games_by_user() -> str:
     """ This function retrieves the list of game ids, names and descriptions that a particular user has purchased. 
 
@@ -114,6 +125,13 @@ def answer_game_realted_questions(question: str) -> str:
     return str(res)
 
 
+def add_game_to_cart_action(game_url: str) -> str:
+    print(f"received game_url: {game_url}")
+    game = get_game_by_url(game_url, session)
+    add_game_to_cart(game, session)
+    return "Game Added To Cart"
+
+
 tools = [
     # StructuredTool.from_function(
     #     func=get_purchased_games_by_user,
@@ -150,6 +168,15 @@ tools = [
         name="AnswerGameRelatedQuestions",
         description="returns the list of games that are related to the user's question about games",
         # args_schema=ComplaintInput,
+        # coroutine= ... <- you can specify an async method if desired as well
+    ),
+
+    StructuredTool.from_function(
+        func=add_game_to_cart_action,
+        name="AddGameToCart",
+        description="Adds the seen game to the user's cart",
+        # return_direct=True,
+        args_schema=AddGameToCartInput,
         # coroutine= ... <- you can specify an async method if desired as well
     ),
 
