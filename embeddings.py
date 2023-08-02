@@ -9,26 +9,27 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 class MyEmbedding:
-    def __init__(self):
+    def __init__(self, collection_name: str):
+        self.collection_name = collection_name
+        self.chroma_db = ChromaEmbedding(collection_name=self.collection_name)
         pass
 
-    def create_and_save_embedding(self, input):
+    def create_and_save_embedding(self, input, id: str):
         """ Create an embedding from a text string. and saves it to a vector
           database"""
         response = openai.Embedding.create(
             input=input,
             engine="adaembedding1")
         embeddings = response['data'][0]['embedding']
-        chroma_db = ChromaEmbedding()
+
         # Pass the embedding to the database Here
-        chroma_db.create_embedding(input, embeddings)
-        # TODO: Save the embedding to the database Andrew
-        print(response)
+        self.chroma_db.create_embedding_with_embeddingitself(
+            input, embeddings, id)
+        # print(response)
 
     def search_by_embedding(self, embedding):
         """ Search for an embedding by query."""
-        chroma_db = ChromaEmbedding()
-        return chroma_db.search_by_embedding(embedding)
+        return self.chroma_db.search_by_embedding(embedding)
 
     def create_embedding(self, input):
         """ Create an embedding from a text string."""

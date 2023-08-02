@@ -22,6 +22,6 @@ import asyncio
 
 
 if __name__ == '__main__':
-    # bootstrap()
+    bootstrap()
     # begin_chat_bot()
-    run_tool()
+    # run_tool()

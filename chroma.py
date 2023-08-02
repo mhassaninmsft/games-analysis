@@ -35,6 +35,19 @@ class ChromaEmbedding:
             ids=[id]
         )
 
+    def create_embedding_with_embeddingitself(self,inputText, inputEmbedding, id: str):
+        """ Create an embedding from a text. Here the id is the url
+        of the website"""
+        self.collection.add(
+            documents=[inputText],
+            # By removing the embedding we use the default embedding function
+            embeddings=[inputEmbedding],
+            # metadatas=[{"chapter": "3", "verse": "16"}, {
+            # "chapter": "3", "verse": "5"}, {"chapter": "29", "verse": "11"},
+            #  ...],
+            ids=[id]
+        )
+
     def search_by_embedding(self, embedding):
         """ Search for an embedding by query."""
         res = self.collection.query(

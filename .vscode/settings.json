@@ -7,9 +7,10 @@
         ],
         "editor.formatOnType": true,
         "editor.wordBasedSuggestions": false,
+        // "editor.defaultFormatter": "autopep",
+        "editor.formatOnSave": true,
         "editor.defaultFormatter": "ms-python.autopep8",
-        "editor.formatOnSave": true
-        
+        // "formatting.provider": "autopep8",
     },
     "python.linting.flake8Args": [
         "--max-line-length=120",
