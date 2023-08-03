@@ -30,6 +30,9 @@ How to determine which flow we are in
 3. https://github.com/langchain-ai/langchain/issues/4000 
 4. https://news.ycombinator.com/item?id=36645575 
 
-# Starting Postgres
+## Starting Postgres
 docker-compose up database
 Call bootstrap to load psql with the data
+
+## Flask Web server resources
+1. https://www.imaginarycloud.com/blog/flask-python/
